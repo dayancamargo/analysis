@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="1 hour">
+    <springProperty scope="context" name="LOG_SERVER"      source="log.level.server"      defaultValue="INFO"/>
+    <springProperty scope="context" name="LOG_APPLICATION" source="log.level.application" defaultValue="DEBUG"/>
+
+    <property name="LOG_PATH" value="log"/>
+    <property name="LOG_FILE" value="data-analysis"/>
+    <property name="LOG_MAX_SIZE" value="10MB"/>
+
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="consoleAppender">
+        <encoder>
+            <pattern>%cyan(Sid:%X{LogId}) %green(%date %-5level) %yellow(%class{30} - %L) %n%gray(%message %n)</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/${LOG_FILE}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <FileNamePattern>${LOG_PATH}/compressed/${LOG_FILE}.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <!-- keep 7 days' worth of history -->
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>Sid:%X{LogId} %date %-5level %class{30}:%L %message %n</pattern>
+        </encoder>
+    </appender>
+
+    <logger additivity="false" level="${LOG_APPLICATION}" name="com.test.analysis">
+        <appender-ref ref="fileAppender"/>
+        <appender-ref ref="consoleAppender"/>
+    </logger>
+
+    <root level="${LOG_SERVER}">
+        <appender-ref ref="fileAppender"/>
+        <appender-ref ref="consoleAppender"/>
+    </root>
+
+</configuration>

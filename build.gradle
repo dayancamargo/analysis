@@ -1,0 +1,36 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.4.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'com.test'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	String camelVersion = '3.0.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation "org.apache.camel.springboot:camel-spring-boot-starter:$camelVersion"
+
+	implementation ("org.apache.commons:commons-lang3")
+
+	annotationProcessor ("org.projectlombok:lombok")
+	compileOnly ("org.projectlombok:lombok")
+
+	testCompile("org.apache.camel:camel-test:$camelVersion")
+	testCompile("org.apache.camel:camel-test-spring:$camelVersion")
+	testCompile("org.springframework.boot:spring-boot-starter-test") {
+		exclude(module: 'commons-logging')
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
