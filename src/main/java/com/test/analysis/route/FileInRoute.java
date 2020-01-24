@@ -25,7 +25,7 @@ public class FileInRoute extends RouteBuilder {
             .log(LoggingLevel.ERROR, "${exception.message}")
         .end();
 
-        from("file:{{file.path.in}}?move={{file.success.dir}}&moveFailed={{file.fail.dir}}&delay={{file.delay.pool}}&charset=ISO-8859-1")
+        from("file:{{file.path.in}}?move={{file.success.dir}}&moveFailed={{file.fail.dir}}&delay={{file.delay.pool}}&charset=ISO-8859-1&include=.*.txt")
             .routeId("fileIn")
             .process(exchange -> MDC.put("LogId", UUID.randomUUID().toString()))
             .log(LoggingLevel.INFO, "Processing: ${header.CamelFileName}")
